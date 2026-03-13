@@ -1,0 +1,5 @@
+# Sensitive
+../openclaw.json
+*.bak
+*.log
+node_modules/
