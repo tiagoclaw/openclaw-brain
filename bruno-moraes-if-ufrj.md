@@ -148,13 +148,37 @@ Rio de Janeiro - RJ
 ✅ **Acesso privilegiado** a recursos e colaborações europeias
 ✅ **Formação de quadros** com visão global
 
+### Busca Extensiva na Internet - 2026-03-14 03:27-03:29 UTC
+
+**Fontes pesquisadas:**
+- ❌ **Google Scholar** - busca específica "Bruno Moraes polytechnique physics UFRJ"
+- ❌ **Plataforma Lattes** - busca textual CNPq  
+- ❌ **ArXiv** - busca por autor "Bruno Moraes"
+- ❌ **ResearchGate** - acesso negado (403)
+- ❌ **Site IF-UFRJ** - portal indisponível
+- ❌ **ORCID** - busca por nome "Bruno Moraes"
+- ❌ **Google Search** - múltiplas tentativas com diferentes combinações
+- ❌ **CAPES-COFECUB** - redirecionamento para página principal
+
+**Limitações identificadas:**
+- **Web search estruturado** indisponível (bug OpenClaw)
+- **Resultados de busca** com conteúdo limitado/bloqueado
+- **Sites acadêmicos** com restrições de acesso
+- **Perfil baixo online** ou informações não indexadas
+
+**Conclusão da busca:**
+- **Informação École Polytechnique** confirmada como diferencial-chave
+- **Dados específicos** não localizáveis via busca pública automatizada
+- **Necessário acesso direto** a fontes internas ou informações privilegiadas
+
 ### Investigação Adicional Recomendada
-1. **Área específica** na École Polytechnique (física teórica? aplicada?)
-2. **Thesis/dissertação** - tópico de pesquisa principal
-3. **Período na França** - duração, orientadores, colaboradores
-4. **Transição Brasil-França** - como chegou ao IF-UFRJ
-5. **Projetos atuais** - aplicação da formação francesa no contexto brasileiro
-6. **Orientandos** - se está formando nova geração com padrão internacional
+1. **Contato direto IF-UFRJ** - departamento, secretaria, colegas
+2. **Rede acadêmica** - conexões internas UFRJ  
+3. **Alumni École Polytechnique** - networks franceses no Brasil
+4. **CAPES-COFECUB** - projetos de cooperação Brasil-França específicos
+5. **Embaixada França** - setor científico/educacional
+6. **LinkedIn acadêmico** - perfis profissionais
+7. **Eventos/conferências** - participações recentes em física
 
 ---
 
