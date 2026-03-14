@@ -17,6 +17,7 @@
 - **Communication:** Direct, objective, action-oriented. Always propose concrete next steps.
 - **Tech stack:** Python, TypeScript, AWS, Blockchain, Data Science
 - **Languages:** Portuguese, English
+- **Location:** Rio de Janeiro, CEP 22245-070 (Botafogo)
 - **Timezone:** America/Sao_Paulo
 - **Decision style:** Data-driven, fast execution, long-term thinking
 - **Interests:** AI, fintech, blockchain, real estate tech, longevity science, behavioral science
