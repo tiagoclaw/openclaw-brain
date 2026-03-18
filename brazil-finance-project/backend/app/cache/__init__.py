@@ -1,0 +1,1 @@
+# Cache system para otimizar requests às fontes de dados

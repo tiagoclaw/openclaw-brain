@@ -1,0 +1,1 @@
+# Data Collectors para diferentes fontes financeiras brasileiras
