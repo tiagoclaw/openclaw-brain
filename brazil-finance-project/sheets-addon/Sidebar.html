@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 10px;
+      line-height: 1.4;
+    }
+    
+    .header {
+      text-align: center;
+      background: linear-gradient(135deg, #1a73e8, #4285f4);
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+    
+    .header p {
+      margin: 5px 0 0 0;
+      opacity: 0.9;
+      font-size: 12px;
+    }
+    
+    .section {
+      margin-bottom: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    .section-title {
+      background: #f8f9fa;
+      padding: 10px 12px;
+      font-weight: bold;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .section-content {
+      padding: 12px;
+    }
+    
+    .formula-item {
+      margin: 8px 0;
+      padding: 8px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      border-left: 3px solid #4285f4;
+    }
+    
+    .formula {
+      font-family: 'Courier New', monospace;
+      background: #e8f0fe;
+      padding: 2px 4px;
+      border-radius: 3px;
+      color: #1a73e8;
+      font-weight: bold;
+    }
+    
+    .description {
+      color: #666;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    
+    .quick-actions {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      margin: 4px;
+      background: #1a73e8;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn:hover {
+      background: #1557b0;
+    }
+    
+    .btn-secondary {
+      background: #f8f9fa;
+      color: #333;
+      border: 1px solid #dadce0;
+    }
+    
+    .btn-secondary:hover {
+      background: #e8eaed;
+    }
+    
+    .tip {
+      background: #e8f5e8;
+      border-left: 4px solid #34a853;
+      padding: 10px;
+      margin: 15px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    
+    .warning {
+      background: #fef7e0;
+      border-left: 4px solid #fbbc04;
+      padding: 10px;
+      margin: 15px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #e0e0e0;
+      font-size: 11px;
+      color: #666;
+    }
+    
+    .collapsible-content {
+      display: none;
+    }
+    
+    .collapsible-content.active {
+      display: block;
+    }
+    
+    .toggle-icon {
+      float: right;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+    
+    .toggle-icon.rotated {
+      transform: rotate(90deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🚀 BrazilFinance</h1>
+    <p>Dados financeiros brasileiros no Google Sheets</p>
+  </div>
+  
+  <div class="quick-actions">
+    <button class="btn" onclick="insertMacroDashboard()">📊 Dashboard Macro</button>
+    <button class="btn" onclick="insertPortfolioTracker()">💰 Portfolio</button>
+  </div>
+  
+  <div class="section">
+    <div class="section-title" onclick="toggleSection('macro')">
+      📈 Indicadores Macro (BCB)
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="section-content collapsible-content" id="macro">
+      <div class="formula-item">
+        <code class="formula">=BCB("selic")</code>
+        <div class="description">Taxa Selic atual</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=BCB("ipca")</code>
+        <div class="description">IPCA mensal mais recente</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=BCB("cdi")</code>
+        <div class="description">Taxa CDI</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=BCB("dolar")</code>
+        <div class="description">Cotação USD/BRL (PTAX)</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=BCB("igpm")</code>
+        <div class="description">IGP-M mensal</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=BCB("desemprego")</code>
+        <div class="description">Taxa de desemprego</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title" onclick="toggleSection('focus')">
+      🔮 Expectativas Focus
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="section-content collapsible-content" id="focus">
+      <div class="formula-item">
+        <code class="formula">=FOCUS("IPCA", 2026)</code>
+        <div class="description">Expectativa IPCA 2026</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=FOCUS("Selic", 2026)</code>
+        <div class="description">Expectativa Taxa Selic 2026</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=FOCUS("PIB Total", 2026)</code>
+        <div class="description">Expectativa PIB 2026</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=FOCUS("Taxa de câmbio", 2026)</code>
+        <div class="description">Expectativa USD/BRL 2026</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=FOCUS("IPCA", 2025, "media")</code>
+        <div class="description">IPCA 2025 (média vs mediana)</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title" onclick="toggleSection('b3')">
+      📊 Mercado B3
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="section-content collapsible-content" id="b3">
+      <div class="formula-item">
+        <code class="formula">=B3("PETR4")</code>
+        <div class="description">Cotação PETR4 atual</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=B3("VALE3", "variacao")</code>
+        <div class="description">Variação % VALE3</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=B3("HGLG11")</code>
+        <div class="description">Cota FII HGLG11</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=B3("BOVA11", "volume")</code>
+        <div class="description">Volume ETF BOVA11</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=B3("ITUB4", "maxima")</code>
+        <div class="description">Máxima do dia</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title" onclick="toggleSection('tesouro')">
+      🏛️ Tesouro Direto
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="section-content collapsible-content" id="tesouro">
+      <div class="formula-item">
+        <code class="formula">=TESOURO("IPCA+ 2035")</code>
+        <div class="description">Taxa IPCA+ 2035</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=TESOURO("Prefixado 2029", "preco")</code>
+        <div class="description">Preço unitário Prefixado 2029</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=TESOURO("Selic 2029", "taxa_venda")</code>
+        <div class="description">Taxa de venda Selic 2029</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title" onclick="toggleSection('helpers')">
+      🔧 Funções Auxiliares
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="section-content collapsible-content" id="helpers">
+      <div class="formula-item">
+        <code class="formula">=MACRO_RESUMO(2026)</code>
+        <div class="description">Dashboard macro automático</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=B3_COMPARAR("PETR4,VALE3,ITUB4")</code>
+        <div class="description">Comparar múltiplos ativos</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=BCB_LISTA()</code>
+        <div class="description">Lista todos indicadores BCB</div>
+      </div>
+      <div class="formula-item">
+        <code class="formula">=BCB_DATA("selic")</code>
+        <div class="description">Data última atualização</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tip">
+    <strong>💡 Dica:</strong> Clique duas vezes em qualquer fórmula para selecioná-la e copiá-la!
+  </div>
+  
+  <div class="warning">
+    <strong>⚠️ Limites:</strong><br>
+    Free: 500 requests/dia<br>
+    Pro: 10K requests/dia (R$ 39/mês)
+  </div>
+  
+  <div class="quick-actions">
+    <button class="btn btn-secondary" onclick="showApiKeyDialog()">🔑 API Key</button>
+    <button class="btn btn-secondary" onclick="refreshAllData()">🔄 Atualizar</button>
+  </div>
+  
+  <div class="footer">
+    <p><strong>BrazilFinance v1.0</strong></p>
+    <p>📖 <a href="https://brazilfinance.com.br/docs" target="_blank">Documentação</a> | 
+       📧 <a href="mailto:suporte@brazilfinance.com.br">Suporte</a></p>
+  </div>
+  
+  <script>
+    function toggleSection(sectionId) {
+      const content = document.getElementById(sectionId);
+      const icon = content.parentElement.querySelector('.toggle-icon');
+      
+      content.classList.toggle('active');
+      icon.classList.toggle('rotated');
+    }
+    
+    // Auto-expand first section
+    document.addEventListener('DOMContentLoaded', function() {
+      toggleSection('macro');
+    });
+    
+    // Make formulas selectable on double-click
+    document.querySelectorAll('.formula').forEach(function(formula) {
+      formula.addEventListener('dblclick', function() {
+        const range = document.createRange();
+        range.selectNodeContents(this);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+      });
+    });
+    
+    // Proxy functions to call Apps Script functions
+    function insertMacroDashboard() {
+      google.script.run.insertMacroDashboard();
+    }
+    
+    function insertPortfolioTracker() {
+      google.script.run.insertPortfolioTracker();
+    }
+    
+    function showApiKeyDialog() {
+      google.script.run.showApiKeyDialog();
+    }
+    
+    function refreshAllData() {
+      google.script.run.refreshAllData();
+    }
+  </script>
+</body>
+</html>

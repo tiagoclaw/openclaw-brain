@@ -256,6 +256,112 @@ function TESOURO_CURVA(tipo) {
 }
 
 // ============================================================
+// BLOCO BÔNUS: HELPER FUNCTIONS
+// ============================================================
+
+/**
+ * Lista todos os indicadores BCB disponíveis.
+ *
+ * @return {string} Lista de indicadores
+ * @customfunction
+ */
+function BCB_LISTA() {
+  try {
+    var response = apiRequest(API_BASE_URL + "/v1/indicators", "default");
+    if (response.erro) return "❌ ERRO: " + response.erro;
+    
+    return response.bcb_sgs ? response.bcb_sgs.indicators.join(", ") : "Indicadores não disponíveis";
+  } catch(e) {
+    return "❌ ERRO: " + e.message;
+  }
+}
+
+/**
+ * Retorna a data da última atualização de um indicador.
+ *
+ * @param {string} indicador - Nome do indicador BCB
+ * @return {string} Data da última atualização
+ * @customfunction
+ */
+function BCB_DATA(indicador) {
+  if (!indicador) return "❌ Uso: =BCB_DATA(\"selic\")";
+  
+  var url = API_BASE_URL + "/v1/bcb/" + encodeURIComponent(indicador) + "?period=ultimo";
+  
+  try {
+    var response = apiRequest(url, "bcb_sgs");
+    if (response.erro) return "❌ ERRO: " + response.erro;
+    
+    return response.data || "Data não disponível";
+  } catch(e) {
+    return "❌ ERRO: " + e.message;
+  }
+}
+
+/**
+ * Retorna resumo de múltiplos indicadores macro.
+ *
+ * @param {number} [ano] - Ano para expectativas (padrão: próximo ano)
+ * @return {Array} Array com resumo macro
+ * @customfunction
+ */
+function MACRO_RESUMO(ano) {
+  if (!ano) {
+    ano = new Date().getFullYear() + 1;
+  }
+  
+  var results = [["Indicador", "Atual", "Expectativa " + ano]];
+  
+  var indicadores = [
+    {nome: "Selic", atual: "selic", focus: "Selic"},
+    {nome: "IPCA", atual: "ipca", focus: "IPCA"}, 
+    {nome: "PIB", atual: "ibc_br", focus: "PIB Total"},
+    {nome: "Dólar", atual: "dolar", focus: "Taxa de câmbio"}
+  ];
+  
+  for (var i = 0; i < indicadores.length; i++) {
+    try {
+      var atual = BCB(indicadores[i].atual);
+      var expectativa = FOCUS(indicadores[i].focus, ano);
+      results.push([indicadores[i].nome, atual, expectativa]);
+    } catch(e) {
+      results.push([indicadores[i].nome, "ERRO", "ERRO"]);
+    }
+  }
+  
+  return results;
+}
+
+/**
+ * Compara performance de múltiplos ativos.
+ *
+ * @param {string} tickers - Tickers separados por vírgula
+ * @return {Array} Array com comparação
+ * @customfunction
+ */
+function B3_COMPARAR(tickers) {
+  if (!tickers) return "❌ Uso: =B3_COMPARAR(\"PETR4,VALE3,ITUB4\")";
+  
+  var tickerList = tickers.split(',');
+  var results = [["Ticker", "Preço", "Variação %"]];
+  
+  for (var i = 0; i < tickerList.length && i < 10; i++) {
+    var ticker = tickerList[i].trim();
+    if (ticker) {
+      try {
+        var preco = B3(ticker, "preco");
+        var variacao = B3(ticker, "variacao");
+        results.push([ticker.toUpperCase(), preco, variacao]);
+      } catch(e) {
+        results.push([ticker.toUpperCase(), "ERRO", "ERRO"]);
+      }
+    }
+  }
+  
+  return results;
+}
+
+// ============================================================
 // SISTEMA DE COMUNICAÇÃO COM API
 // ============================================================
 

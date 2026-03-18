@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrazilFinance - Dados Financeiros Brasileiros no Google Sheets</title>
+    <meta name="description" content="Acesse indicadores BCB, expectativas Focus, cotações B3 e Tesouro Direto diretamente no Google Sheets com fórmulas simples.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="BrazilFinance - Dados Financeiros no Google Sheets">
+    <meta property="og:description" content="=BCB('selic') - =FOCUS('IPCA', 2026) - =B3('PETR4') - =TESOURO('IPCA+ 2035')">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://brazilfinance.com.br">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a73e8;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #1a73e8;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 8rem 0 4rem;
+            text-align: center;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .formula-demo {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .formula-demo code {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
+            box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: #1557b0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 115, 232, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background: white;
+        }
+        
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .feature-examples {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            text-align: center;
+        }
+        
+        .problem h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .problem-list {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        
+        .problem-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 5rem 0;
+            background: white;
+        }
+        
+        .pricing h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card.featured {
+            border-color: #1a73e8;
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(26, 115, 232, 0.2);
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a73e8;
+            margin-bottom: 1rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+        
+        .pricing-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .badge {
+            background: #1a73e8;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">📊 BrazilFinance</div>
+            <ul class="nav-links">
+                <li><a href="#features">Recursos</a></li>
+                <li><a href="#pricing">Preços</a></li>
+                <li><a href="#docs">Docs</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Dados Financeiros Brasileiros<br>no Google Sheets</h1>
+            <p>Acesse indicadores BCB, expectativas Focus, cotações B3 e Tesouro Direto com fórmulas simples</p>
+            
+            <div class="formula-demo">
+                <div><code>=BCB("selic")</code> → 10.75%</div>
+                <div><code>=FOCUS("IPCA", 2026)</code> → 3.8%</div>
+                <div><code>=B3("PETR4")</code> → R$ 32.45</div>
+                <div><code>=TESOURO("IPCA+ 2035")</code> → 6.12%</div>
+            </div>
+            
+            <div class="cta-buttons">
+                <a href="#install" class="btn btn-primary">🚀 Instalar Grátis</a>
+                <a href="#demo" class="btn btn-secondary">📹 Ver Demo</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <h2>Você ainda copia dados do BCB manualmente? 😩</h2>
+            <div class="problem-list">
+                <div class="problem-item">
+                    <strong>⏰ Perda de tempo:</strong> Horas semanais navegando no SGS, Focus, B3...
+                </div>
+                <div class="problem-item">
+                    <strong>❌ Dados desatualizados:</strong> Planilhas ficam obsoletas rapidamente
+                </div>
+                <div class="problem-item">
+                    <strong>🐛 Erros manuais:</strong> Copy & paste introduz erros e inconsistências
+                </div>
+                <div class="problem-item">
+                    <strong>📊 Sem automação:</strong> Dashboards estáticos que não se atualizam
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Solução: Fórmulas Inteligentes</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Indicadores Macro</h3>
+                    <p>BCB SGS completo: Selic, IPCA, CDI, Câmbio, IGP-M, IBC-Br, Desemprego e mais</p>
+                    <div class="feature-examples">
+=BCB("selic")<br>
+=BCB("ipca", "12m")<br>
+=BCB("dolar")<br>
+=BCB("desemprego")
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔮</div>
+                    <h3>Expectativas Focus</h3>
+                    <p>Projeções de mercado do Banco Central: IPCA, Selic, PIB, Câmbio por ano</p>
+                    <div class="feature-examples">
+=FOCUS("IPCA", 2026)<br>
+=FOCUS("Selic", 2026)<br>
+=FOCUS("PIB Total", 2026)<br>
+=FOCUS("Taxa de câmbio", 2026)
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Cotações B3</h3>
+                    <p>Ações, FIIs e ETFs em tempo real: preço, variação, volume, máxima, mínima</p>
+                    <div class="feature-examples">
+=B3("PETR4")<br>
+=B3("VALE3", "variacao")<br>
+=B3("HGLG11")<br>
+=B3("BOVA11", "volume")
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🏛️</div>
+                    <h3>Tesouro Direto</h3>
+                    <p>Taxas e preços de todos os títulos: IPCA+, Prefixado, Selic</p>
+                    <div class="feature-examples">
+=TESOURO("IPCA+ 2035")<br>
+=TESOURO("Prefixado 2029")<br>
+=TESOURO("Selic 2029", "preco")
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Cache Inteligente</h3>
+                    <p>Dados atualizados automaticamente com cache otimizado por fonte</p>
+                    <div class="feature-examples">
+BCB SGS: 1h<br>
+Focus: 2h<br>
+B3: 5min<br>
+Tesouro: 1h
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Funções Auxiliares</h3>
+                    <p>Dashboards automáticos, comparações, listas e análises prontas</p>
+                    <div class="feature-examples">
+=MACRO_RESUMO(2026)<br>
+=B3_COMPARAR("PETR4,VALE3")<br>
+=BCB_LISTA()<br>
+=BCB_DATA("selic")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Planos Transparentes</h2>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>🆓 Free</h3>
+                    <div class="price">R$ 0</div>
+                    <ul class="pricing-features">
+                        <li>✅ 500 requests/dia</li>
+                        <li>✅ Indicadores BCB básicos</li>
+                        <li>✅ Cotações B3 principais</li>
+                        <li>✅ Cache 5-30 minutos</li>
+                        <li>✅ Suporte por email</li>
+                    </ul>
+                    <a href="#install" class="btn btn-secondary">Começar Grátis</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="badge">Mais Popular</div>
+                    <h3>💎 Pro</h3>
+                    <div class="price">R$ 39<small>/mês</small></div>
+                    <ul class="pricing-features">
+                        <li>✅ <strong>10.000 requests/dia</strong></li>
+                        <li>✅ <strong>Todos os indicadores</strong></li>
+                        <li>✅ <strong>Focus + Tesouro completos</strong></li>
+                        <li>✅ <strong>Cache otimizado</strong></li>
+                        <li>✅ <strong>Suporte prioritário</strong></li>
+                        <li>✅ <strong>Novos recursos primeiro</strong></li>
+                    </ul>
+                    <a href="#upgrade" class="btn btn-primary">Upgrade Pro</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>🏢 Team</h3>
+                    <div class="price">R$ 149<small>/mês</small></div>
+                    <ul class="pricing-features">
+                        <li>✅ <strong>50.000 requests/dia</strong></li>
+                        <li>✅ <strong>SLA 99.9%</strong></li>
+                        <li>✅ <strong>API key dedicada</strong></li>
+                        <li>✅ <strong>Suporte 24/7</strong></li>
+                        <li>✅ <strong>Custom functions</strong></li>
+                        <li>✅ <strong>Consultoria inclusa</strong></li>
+                    </ul>
+                    <a href="#contact" class="btn btn-secondary">Falar com Vendas</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#docs">📖 Documentação</a>
+                <a href="#api">🔌 API</a>
+                <a href="#support">🆘 Suporte</a>
+                <a href="#privacy">🔒 Privacidade</a>
+                <a href="#terms">📄 Termos</a>
+            </div>
+            
+            <p>&copy; 2026 BrazilFinance. Democratizando dados financeiros brasileiros.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7; font-size: 0.9rem;">
+                Desenvolvido com ❤️ para economistas, analistas e investidores brasileiros
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Analytics placeholder -->
+    <script>
+        // Google Analytics ou Plausible aqui
+        console.log('BrazilFinance Landing Page loaded');
+        
+        // Simple click tracking
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                console.log('Click:', href);
+            });
+        });
+    </script>
+</body>
+</html>
